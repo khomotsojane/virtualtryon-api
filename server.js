@@ -8,10 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ROUTES
+
 app.use("/api/products", productRoutes);
 
-// TEST ROUTE
+
 app.get("/", (req, res) => {
   res.send("API is running");
 });
