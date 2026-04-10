@@ -1,4 +1,5 @@
 // routes/products.js
+import upload from "../middleware/upload.js";
 import express from "express";
 import Product from "../models/Product.js";
 
@@ -22,10 +23,20 @@ router.get("/search", async (req, res) => {
 });
 
 // ADD product
-router.post("/", async (req, res) => {
-  const product = new Product(req.body);
-  await product.save();
-  res.json(product);
+router.post("/", upload.single("image"), async (req, res) => {
+  try {
+    const imageUrl = req.file.path; 
+    const product = new Product({
+      ...req.body,
+      image: imageUrl,
+    });
+
+    await product.save();
+
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router;
